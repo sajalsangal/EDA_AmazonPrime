@@ -11,6 +11,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 sns.set_theme(style="whitegrid")
 
 # Sidebar for navigation
+#comment for no purpose
 st.sidebar.title("Navigation")
 page = st.sidebar.radio(
     "Select Page:",
