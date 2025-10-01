@@ -4,6 +4,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
+import time
 warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 
 
@@ -13,15 +14,43 @@ sns.set_theme(style="whitegrid")
 # Sidebar for navigation
 #comment for no purpose
 st.sidebar.title("Navigation")
+st.sidebar.header("This is a sidebar header")
+st.sidebar.subheader("This is a sidebar subheader")
+
 page = st.sidebar.radio(
     "Select Page:",
     ["Welcome", "Univariate Analysis", "Bivariate Analysis", "Multivariate Analysis"],
     key="navigation"
 )
 
+
 # Welcome Page
 if page == "Welcome":
     st.title("Welcome to the Data Analysis Application 🎉")
+    st.header("This is a main header")
+    st.subheader("This is a subheader")
+
+    df = pd.read_csv("../youtube_data.csv")
+    csv = df.to_csv().encode("utf-8")
+    progress_text = "Operation in progress. Please wait."
+    my_bar = st.progress(0, text=progress_text)
+    for percent_complete in range(100):
+        time.sleep(0.01)
+        my_bar.progress(percent_complete + 1, text=progress_text)
+    time.sleep(1)
+    my_bar.empty()
+    st.button("Rerun")
+
+    if st.button("Prepare download", width= 300):
+     st.download_button(
+         label="Download text",
+         data=csv,
+         file_name="message.csv",
+         type="primary",
+         icon=":material/download:",
+         mime="text/csv"
+     )
+            
     st.write(
         """
         This application is designed for dynamic data visualization and analysis using your uploaded dataset. It supports:
