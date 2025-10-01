@@ -6,9 +6,13 @@ import streamlit as st
 import plotly.express as px
 import time
 import homepage #Custom class which handles homepage data
+import univariateAnalysis #Customer class for univariate analysis
 import warnings
 warnings.filterwarnings("ignore", category= UserWarning, module= "matplotlib")
 
+
+homePageObj = homepage.HomePage() #An instance of HomePage Class inside homepage module
+univariateObj = univariateAnalysis.Univariate() #Instance of Univariate class
 
 sns.set_theme(style= "whitegrid") #Set theme for graphs
 
@@ -51,10 +55,11 @@ with sidebarCol2:
     </style>
     """, unsafe_allow_html=True)
 
+#SideBar Page Selection Pannel
 page = st.sidebar.selectbox(
     label= "Select Page", 
     options= ["Home Page", "Univariate Analysis", "Bi-Variate Analysis", "MultiVariate Analysis"], 
-    index= 0, 
+    index= 1, 
     key= "navigationSelectBox",
     help= """
     **Navigate through different pages**
@@ -63,9 +68,7 @@ page = st.sidebar.selectbox(
     """
     )
 
-homePageObj = homepage.HomePage() #An instance of HomePage Class inside homepage module
-
-#Home Page Properties
+#Page Properties
 if page == "Home Page":
 
     #Load HomePage Navigation Content
@@ -73,6 +76,19 @@ if page == "Home Page":
 
     #Load HomePage Body Content
     homePageObj.homePageBody()
+elif page == "Univariate Analysis":
+
+    #Load Univariate Navigation Content
+    filter = univariateObj.univariateFilters()
+
+    #Load Univariate Body Content
+    univariateObj.univariateBody()
+    if not filter:
+        st.info("Toggle Filter Options to Display Graph !", icon="ℹ️")
+
+    #Display graphs based on checkbox
+    if filter == "Histogram":
+        univariateObj.histogram_display()
         
     
 
