@@ -17,7 +17,7 @@ class Univariate:
             options= ["Histogram", "Box Plot", "Count Plot", "Pie Plot"],
             key= "filterUnivariate",
             help= "Choose to display graph 📈",
-            index= None
+            index= 1
         )
 
         return filter_option
@@ -84,7 +84,7 @@ class Univariate:
                 self.__display_graph(fig)
 
             #Display Graph Information and Findings
-            st.write("### **What are the collective insights found ?**")
+            st.write("### **Detailed Insights From Each Column**")
             st.write(
                 """
 
@@ -138,6 +138,127 @@ class Univariate:
                 5) Production trends show booms in certain years ⏰.
                 """
             )
+
+    def boxplot_display(self):
+        st.header("BoxPlot")
+        cols = ['imdb_votes', 'tmdb_popularity']
+
+        #Boxplot sidebar features
+        #Show a sidebar multiselect to select display columns
+        select_col = st.sidebar.multiselect(
+            label= "BoxPlot",
+            options= cols,
+            key= "boxPlotColumns",
+            placeholder= "Choose Columns"
+            )
+        st.sidebar.info(body= "Select multiple columns to display their graphs.", icon= "🎉")
+
+        if not select_col:
+            st.info("Choose which columns to display from the sidebar", icon= "ℹ️") 
+
+        
+        if select_col:
+            for col in select_col:
+                # Calculate bin width
+                min_val = self.__data["release_year"].min()
+                max_val = self.__data["release_year"].max()
+
+                # Slider for number of bins
+                value_range = st.slider("Select Year Range", min_value=min_val, max_value=max_val, value=max_val, key= f"{col}")
+
+                fig = px.box(self.__data[self.__data["release_year"] <= value_range], 
+                    x = col, 
+                    color= "type",
+                    template="plotly_dark", # Sleek dark theme (can use "plotly_white" if preferred)
+                    color_discrete_sequence=px.colors.qualitative.Pastel,  # Soft, pleasant colors
+                    hover_data= ["title", "release_year", "age_certification"],
+                    )
+
+                fig.update_traces(
+                    marker=dict(size=6, line=dict(width=1, color='DarkSlateGrey'))
+                )
+
+                fig.update_layout(
+                    title_font_size=22,
+                    title= f"Distribution of {col.replace('_', ' ').title()}"
+                )
+
+                fig.update_yaxes(title= f"{col.replace('_', ' ').title()}", showgrid = True)
+                fig.update_xaxes(title= "Values", showgrid = True, tickformat= ",d")
+
+                self.__display_graph(fig)
+
+            st.write("### **Detailed Insights From Each Column**")
+
+            st.write(
+                """
+                ---
+                ##### **Distribution of Numeric Columns**  
+
+                **imdb_votes**  
+                Most ratings cluster in the mid-to-high range. Some extremely low or high scores appear as outliers, highlighting highly unpopular or extremely well-rated content.  
+
+                **tmdb_popularity**  
+                Highly skewed distribution: a few titles get massive attention (outliers), while most get moderate votes/popularity.  
+
+                ---
+                ##### **Skewness and Spread**   
+
+                Columns like imdb_votes and tmdb_popularity are right-skewed, indicating most content has moderate attention, and few are extremely popular.  
+
+                Columns like imdb_score might have a tighter spread, showing most content falls in a typical rating range.  
+
+                """
+            )
+
+            st.write(
+                """
+                ### **Positive Business Impact**
+
+                ---
+                ##### Understanding Content Performance
+
+                IMDB/TMDB scores and votes show which content is most liked and engaged with.
+
+                **Actionable insight**: Invest more in content types or genres that consistently receive high scores and popularity. ✅
+
+                ---
+                ##### Outlier Identification
+
+                Extremely long or short content, or highly unpopular content, is visible as outliers.
+
+                **Actionable insight**: Avoid producing extremely long content unless it’s proven to engage audiences; similarly, identify why some content fails to gain votes/popularity. ✅
+
+                ---
+                ##### Skewed Popularity Metrics
+
+                Columns like tmdb_popularity are right-skewed, showing that a few titles dominate attention.
+
+                **Actionable insight:** Strategically promote underperforming but high-quality content to balance audience engagement. ✅
+
+                ### **Negative Impact**
+
+                ---
+                ##### Skewed Popularity Metrics
+
+                **Observation:** Columns like imdb_votes and tmdb_popularity are highly right-skewed.
+
+                **Negative impact:** Most content gets low engagement while only a few titles dominate popularity.
+
+                **Risk:** Relying on the same top-performing content repeatedly could lead to over-dependence on a few hits, leaving most content underperforming.
+
+                ---
+                ##### Low Ratings
+
+                **Observation:** Outliers with very low imdb_score or tmdb_score appear in the box plots.
+
+                **Negative impact:**
+
+                Low-rated content can damage brand perception if such content is frequent. May reduce subscriber retention or discourage engagement.
+
+                """
+            )
+                
 
 
         

@@ -89,6 +89,8 @@ elif page == "Univariate Analysis":
     #Display graphs based on checkbox
     if filter == "Histogram":
         univariateObj.histogram_display()
+    elif filter == "Box Plot":
+        univariateObj.boxplot_display()
         
     
 
