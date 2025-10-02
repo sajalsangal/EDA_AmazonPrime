@@ -17,7 +17,7 @@ class Univariate:
             options= ["Histogram", "Box Plot", "Count Plot", "Pie Plot"],
             key= "filterUnivariate",
             help= "Choose to display graph 📈",
-            index= 1
+            index= 2
         )
 
         return filter_option
@@ -159,14 +159,14 @@ class Univariate:
         
         if select_col:
             for col in select_col:
-                # Calculate bin width
+                # Calculate slider range
                 min_val = self.__data["release_year"].min()
                 max_val = self.__data["release_year"].max()
 
-                # Slider for number of bins
-                value_range = st.slider("Select Year Range", min_value=min_val, max_value=max_val, value=max_val, key= f"{col}")
+                # Slider for range of year
+                value_range = st.slider("Select Year Range", min_value=min_val, max_value=max_val, value=(min_val, max_val), key= f"{col}")
 
-                fig = px.box(self.__data[self.__data["release_year"] <= value_range], 
+                fig = px.box(self.__data[(self.__data["release_year"] >= value_range[0]) & (self.__data["release_year"] <= value_range[1])], 
                     x = col, 
                     color= "type",
                     template="plotly_dark", # Sleek dark theme (can use "plotly_white" if preferred)
@@ -213,32 +213,33 @@ class Univariate:
 
             st.write(
                 """
-                ### **Positive Business Impact**
 
                 ---
+                ### **Positive Business Impact**
+
                 ##### Understanding Content Performance
 
                 IMDB/TMDB scores and votes show which content is most liked and engaged with.
 
-                **Actionable insight**: Invest more in content types or genres that consistently receive high scores and popularity. ✅
+                **Actionable insight**: Invest more in content types or genres that consistently receive high scores and popularity. ""
 
                 ---
                 ##### Outlier Identification
 
                 Extremely long or short content, or highly unpopular content, is visible as outliers.
 
-                **Actionable insight**: Avoid producing extremely long content unless it’s proven to engage audiences; similarly, identify why some content fails to gain votes/popularity. ✅
+                **Actionable insight**: Avoid producing extremely long content unless it’s proven to engage audiences; similarly, identify why some content fails to gain votes/popularity. ""
 
                 ---
                 ##### Skewed Popularity Metrics
 
                 Columns like tmdb_popularity are right-skewed, showing that a few titles dominate attention.
 
-                **Actionable insight:** Strategically promote underperforming but high-quality content to balance audience engagement. ✅
-
-                ### **Negative Impact**
+                **Actionable insight:** Strategically promote underperforming but high-quality content to balance audience engagement. ""
 
                 ---
+                ### **Negative Impact**
+
                 ##### Skewed Popularity Metrics
 
                 **Observation:** Columns like imdb_votes and tmdb_popularity are highly right-skewed.
@@ -258,6 +259,142 @@ class Univariate:
 
                 """
             )
+
+    def countplot_display(self):
+        st.header("Count Plot")
+        cols = ['genres', 'production_countries', 'name', 'character']
+
+        #CountPlot Sidebar features
+        #Show a sidebar multiselect to select display columns
+        select_col = st.sidebar.multiselect(
+            label= "CountPlot",
+            options= cols,
+            key= "CountPlotColumns",
+            placeholder= "Choose Columns"
+            )
+        st.sidebar.info(body= "Select multiple columns to display their graphs.", icon= "🎉")
+
+        if not select_col:
+            st.info("Choose which columns to display from the sidebar", icon= "ℹ️") 
+
+        if select_col:
+            for col in select_col:
+                
+                #Top N values in column
+                top_n = 20
+
+                #Slider to choose how many top values to display
+                value_range = st.slider("Select Top(N) Elements", min_value=1, max_value=top_n, value= 15, key= f"{col}")
+                filtered_data = self.__data[self.__data[col] != "Unknown"][col].value_counts().nlargest(value_range)
+
+                fig = px.bar(filtered_data, 
+                             x= filtered_data.index, 
+                             y = filtered_data.values,
+                             text=filtered_data.values,   # Show counts on bars
+                             color=filtered_data.index,   # Different color for each category
+                             color_discrete_sequence=px.colors.qualitative.Vivid  # Vibrant palette
+                             )
+                
+                fig.update_layout(
+                    title_font_size=22,
+                    title= f"Distribution of {col.replace('_', ' ').title()}"
+                )
+
+                fig.update_traces(
+                    texttemplate='%{text:,}',     # Add commas to big numbers
+                    textposition='outside',       # Labels above bars
+                    marker=dict(line=dict(width=1, color="DarkSlateGray"))  # Clean bar edges
+                )
+
+                fig.update_xaxes(title= f"{col.replace('_', ' ').title()}", showgrid = True)
+                fig.update_yaxes(title= "# Of Values", tickformat= ",d")
+
+                self.__display_graph(fig)
+
+            st.write("#### Detailed Insights From Each Column")
+
+            st.write(
+                """
+
+                ---
+                ##### **Movies Dominate Shows**
+
+                The dataset is heavily skewed toward movies across genres, actors, and roles.
+                
+                ---
+                ##### **Genres – Drama Leads Strongly**
+
+                Drama is the most common genre by a large margin, followed by comedy and documentaries.
+
+                Multi-genre blends (Drama+Romance, Thriller+Drama, etc.) are also well-represented.
+
+                ---
+                ##### **Production – US-Centric**
+
+                Nearly all productions are US-based (~48k), with India, UK, Canada, and France trailing far behind.
+
+                Co-productions exist but are minimal in volume.
+
+                ---
+                ##### **Actors & Characters – Classic & Generic**
+
+                Frequent actors are largely from classic Hollywood (e.g., Roy Rogers, Gene Autry).
+
+                Character roles are often generic (Himself, Nurse, Sheriff, Waitress), pointing to many documentaries and background roles.
+            """
+            )
+
+            st.write(
+                """
+                    ---
+                    #### Positive Impact
+
+                    ##### **Focus on high-demand categories 🌟**
+
+                    *   **Observation:** The tallest bars indicate the most frequent or popular categories.
+                    *   **Business impact:** You can invest more in popular genres, regions, or product types to maximize ROI, engagement, or sales.
+
+                    ---
+                    ##### **Explore underserved categories 🌱**
+
+                    *   **Observation:** Short bars show underrepresented categories.
+                    *   **Business impact:** These represent growth opportunities. Investing in niche or emerging categories can capture untapped market segments.
+
+                    ---
+                    ##### **Early detection of issues ⚠️**
+
+                    *   **Observation:** Tiny or unexpected categories can indicate data inconsistencies.
+                    *   **Business impact:** Fixing data quality issues early prevents wrong business decisions based on flawed data.
+
+                    ---
+                    #### Negative Impacts
+
+                    ##### **Over-reliance on dominant categories ⚠️**
+
+                    *   **Observation:** Some categories dominate the dataset (very tall bars), while others are rare.
+                    *   **Negative impact:** Focusing too much on the top categories may ignore emerging or niche markets. Competitors could capture these underserved segments, leading to missed growth opportunities.
+
+                    ---
+                    ##### **High-cardinality categories with insufficient focus 🔍**
+
+                    *   **Observation:** Columns with many unique values (e.g., production countries, creators) may have some categories barely represented.
+                    *   **Negative impact:** Without targeted strategies, these low-frequency categories may never gain traction, limiting expansion opportunities.
+
+                    ---
+                    ##### **Hidden data quality issues 🛑**
+
+                    *   **Observation:** Unexpected or empty categories appear as tiny bars.
+                    *   **Negative impact:** Poor data quality can mislead decision-making, causing investments in wrong areas, inefficiency, or reputational risk.
+
+                    ---
+                    ##### **Overcrowded focus on niche categories without ROI 💸**
+
+                    *   **Observation:** Some rare categories are small but tempting to invest in.
+                    *   **Negative impact:** Spending too much on very low-frequency categories may drain resources without sufficient return.
+                    """
+            )
+
+
                 
 
 

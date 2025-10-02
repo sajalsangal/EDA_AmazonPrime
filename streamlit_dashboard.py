@@ -91,6 +91,8 @@ elif page == "Univariate Analysis":
         univariateObj.histogram_display()
     elif filter == "Box Plot":
         univariateObj.boxplot_display()
+    elif filter == "Count Plot":
+        univariateObj.countplot_display()
         
     
 
