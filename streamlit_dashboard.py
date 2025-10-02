@@ -93,6 +93,11 @@ elif page == "Univariate Analysis":
         univariateObj.boxplot_display()
     elif filter == "Count Plot":
         univariateObj.countplot_display()
+    elif filter == "Pie Plot":
+        univariateObj.pieplot_display()
+
+elif page == "Bi-Variate Analysis":
+    pass
         
     
 

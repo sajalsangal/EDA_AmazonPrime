@@ -17,7 +17,7 @@ class Univariate:
             options= ["Histogram", "Box Plot", "Count Plot", "Pie Plot"],
             key= "filterUnivariate",
             help= "Choose to display graph 📈",
-            index= 2
+            index= 3
         )
 
         return filter_option
@@ -391,6 +391,115 @@ class Univariate:
 
                     *   **Observation:** Some rare categories are small but tempting to invest in.
                     *   **Negative impact:** Spending too much on very low-frequency categories may drain resources without sufficient return.
+                    """
+            )
+    
+    def pieplot_display(self):
+        st.header("Pie Plot")
+
+        cols = ['age_certification', 'genres','type', 'production_countries']
+
+        #PiePlor Sidebar features
+        #Show a sidebar multiselect to select display columns
+        select_col = st.sidebar.multiselect(
+            label= "Pie Plot",
+            options= cols,
+            key= "PiePlotColumns",
+            placeholder= "Choose Columns"
+            )
+        st.sidebar.info(body= "Select multiple columns to display their graphs.", icon= "🎉")
+
+        if not select_col:
+            st.info("Choose which columns to display from the sidebar", icon= "ℹ️") 
+
+        if select_col:
+            for col in select_col:
+                filtered_data = self.__data[(self.__data[col] != "Unknown") & (self.__data[col] != "[]")][col].value_counts().nlargest(15)
+
+                # Calculate percentage
+                total = filtered_data.sum()
+                percentages = (filtered_data / total) * 100
+
+                # Split into main + others
+                main_data = filtered_data[percentages >= 2]
+                others = filtered_data[percentages < 2].sum()
+
+                # Append "Others" if needed
+                if others > 0:
+                    filtered_data_final = pd.concat([main_data, pd.Series({"Others": others})])
+                else:
+                    filtered_data_final = main_data
+
+                fig = px.pie(filtered_data, 
+                             names= filtered_data_final.index,
+                             values= filtered_data_final.values,
+                             hole= 0.45,
+                             color= filtered_data_final.index,
+                             color_discrete_sequence=px.colors.qualitative.Pastel,
+                             )
+                
+                # Update traces for better labels
+                fig.update_traces(
+                    textposition="outside",      # move labels outside slices
+                    textinfo="percent+label",    # show % and label
+                    pull=[0.05]*len(filtered_data_final),  # slight pull effect for all slices
+                    rotation=90,                 # start at top
+                    marker=dict(line=dict(color="white", width=2))  # clean edges
+                )
+
+                fig.update_layout(
+                    title_font_size= 22,
+                    title= f"Distribution of {col.replace('_', ' ').title()}",
+                    legend_title=col.replace("_", " ").title(),
+                    height=450,
+                    width=900,
+                    template="plotly_white"
+                    
+                )
+
+                self.__display_graph(fig)
+
+            st.write(
+                """
+                    #### **Insights from Donut Charts 😄🍩**  
+
+                    ##### **Content Type Distribution 📺🎬**  
+
+                    - One type (e.g., Movie or TV Show) dominates the dataset, showing which type is more prevalent.  
+                    - Helps understand the focus of the platform or dataset.  
+
+                    ---
+                    ##### **Age Certification Patterns 🔞👶**   
+
+                    - Most titles fall under certain age certifications (like TV-MA, PG-13), giving insight into the target audience demographics.  
+
+                    ---
+                    ##### **Genre Popularity 🎭**   
+
+                    - Some genres appear far more frequently (e.g., Drama, Comedy), while niche genres have smaller proportions combined into “Others.”  
+                    - Shows which genres are most produced or available, guiding content strategy.  
+
+                    ---
+                    ##### **Production Countries 🌍**  
+
+                    - A few countries dominate production, indicating regional content concentration.  
+                    - Can guide market expansion or regional marketing strategies.  
+
+                    ---
+                    ##### **Small Slices Combined as “Others” 📝**   
+
+                    - Combining minor categories keeps the visualization clean and highlights major contributors, making insights clearer.  
+
+                    ---
+                    ##### **Interactive Hover Insights 🖱️**  
+
+                    - You can see exact counts and percentages for each category, making it easy to extract precise business insights.  
+
+                    ---
+                    ##### **Overall Insight**   
+
+                    - The charts clearly show which categories dominate, which are niche, and where the focus lies, helping to make data-driven content and marketing decisions 😄📊.
+
                     """
             )
 
