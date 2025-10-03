@@ -106,6 +106,9 @@ elif page == "Bi-Variate Analysis":
     bivariateObj.bivariateBody()
     if not filter:
         st.info("Toggle Filter Options to Display Graph !", icon="ℹ️")
+
+    if filter == "Line Plot":
+        bivariateObj.linePlot()
         
     
 
