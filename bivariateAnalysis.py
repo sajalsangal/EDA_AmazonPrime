@@ -18,7 +18,7 @@ class Bivariate:
             options= ["Line Plot", "Bar Plot", "Violin Plot","Bubble Chart" , "TreeMap"],
             key= "filterBivariate",
             help= "Choose to display graph 📈",
-            index= 2
+            index= 3
         )
 
         return filter_option
@@ -320,6 +320,98 @@ class Bivariate:
             
     def bubblechart(self):
         st.header("Bubble Chart")
+        # Filter dataset: only titles with significant votes
+        df_clean = self.__data[self.__data["imdb_votes"] > 5000]
+
+        # Limit to top 5 genres for clarity
+        top_genres = df_clean["age_certification"].value_counts().index
+        df_clean = df_clean[df_clean["age_certification"].isin(top_genres) & (df_clean["age_certification"] != "Unknown")]
+
+        fig = px.scatter(df_clean,
+                         x= "imdb_score",
+                         y= "tmdb_popularity",
+                         size= "imdb_votes",
+                         color= "age_certification",
+                         hover_name="title",
+                         hover_data={
+                            "release_year": True,
+                            "imdb_score": True,
+                            "imdb_votes": True,
+                            "type": True,
+                            "genres": False
+                        },
+                         size_max=20,                     # bigger bubbles
+                         opacity=0.7,
+                         color_discrete_sequence= px.colors.qualitative.Vivid
+                         )
+        
+        fig.update_traces(
+            marker=dict(
+                line=dict(width=0.5, color="white")  # clean white border around bubbles
+            ),
+            selector=dict(mode="markers")
+        )
+
+        fig.update_layout(
+            title=dict(
+                text="IMDb Score vs TMDB Popularity",
+                x=0.5, xanchor="center",
+                font=dict(size=22, family="Arial, sans-serif")
+            ),
+            xaxis=dict(
+                title="IMDb Score",
+                showgrid=True,
+                zeroline=False,
+                gridcolor="lightgray"
+            ),
+            yaxis=dict(
+                title="TMDB Popularity",
+                zeroline=False,
+                gridcolor="lightgray"
+            ),
+            legend=dict(
+                title="Age Certification",
+                orientation="h",
+                yanchor="bottom",
+                y= -0.5,
+                xanchor="center",
+                x=0.5
+            ),
+            plot_bgcolor="white",
+            margin=dict(l=60, r=40, t=80, b=60),
+            hovermode="closest"
+        )
+        
+        self.__display_graph(fig)
+
+        st.write("""
+                 
+                ---
+                ### **Bubble Chart Description**
+
+                ##### **Two key variables on axes 📊:**  
+                - imdb_score on the x-axis shows temporal trends.  
+                - tmdb_popularity on the y-axis shows viewer ratings.  
+
+                ##### **Third variable via bubble size 🎈:**  
+                - imdb_votes determines bubble size, highlighting popularity of titles.  
+
+                ##### **Categorical distinction via color (hue) 🎨:**  
+                - Using age certification as color makes it easy to compare performances.  
+
+                ##### **Interactive insights 😎:**  
+                - Hover displays title, votes, score, and type, making it explorable for deeper insights.  
+
+                ##### **Handles density smartly 🧹:**  
+                - Jitter on x-axis avoids overlapping points for titles released in the same year.  
+                - Opacity and sizing make the plot readable even with many data points.  
+
+                > ✅ In short: Bubble plot lets you see trends, popularity, ratings, and genre differences all in one glance, which is much harder with scatter plots or bar charts alone 😄✨.
+
+                 """)
+        
+
+
 
 
         
