@@ -6,13 +6,15 @@ import streamlit as st
 import plotly.express as px
 import time
 import homepage #Custom class which handles homepage data
-import univariateAnalysis #Customer class for univariate analysis
+import univariateAnalysis #Custom class for univariate analysis
+import bivariateAnalysis #Custom class for bivariate analysis
 import warnings
 warnings.filterwarnings("ignore", category= UserWarning, module= "matplotlib")
 
 
 homePageObj = homepage.HomePage() #An instance of HomePage Class inside homepage module
 univariateObj = univariateAnalysis.Univariate() #Instance of Univariate class
+bivariateObj = bivariateAnalysis.Bivariate() #Instance of Bivariate class
 
 sns.set_theme(style= "whitegrid") #Set theme for graphs
 
@@ -59,7 +61,7 @@ with sidebarCol2:
 page = st.sidebar.selectbox(
     label= "Select Page", 
     options= ["Home Page", "Univariate Analysis", "Bi-Variate Analysis", "MultiVariate Analysis"], 
-    index= 1, 
+    index= 2, 
     key= "navigationSelectBox",
     help= """
     **Navigate through different pages**
@@ -93,11 +95,17 @@ elif page == "Univariate Analysis":
         univariateObj.boxplot_display()
     elif filter == "Count Plot":
         univariateObj.countplot_display()
-    elif filter == "Pie Plot":
+    elif filter == "Donut Plot":
         univariateObj.pieplot_display()
 
 elif page == "Bi-Variate Analysis":
-    pass
+    
+    filter = bivariateObj.bivariateFilters()
+
+    #Display heading for bivariate analysis
+    bivariateObj.bivariateBody()
+    if not filter:
+        st.info("Toggle Filter Options to Display Graph !", icon="ℹ️")
         
     
 
