@@ -109,6 +109,8 @@ elif page == "Bi-Variate Analysis":
 
     if filter == "Line Plot":
         bivariateObj.linePlot()
+    elif filter == "Bar Plot":
+        bivariateObj.barplot()
         
     
 

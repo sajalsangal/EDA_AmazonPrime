@@ -18,7 +18,7 @@ class Bivariate:
             options= ["Line Plot", "Bar Plot", "Bubble Chart", "Violin Plot", "TreeMap"],
             key= "filterBivariate",
             help= "Choose to display graph 📈",
-            index= 0
+            index= 1
         )
 
         return filter_option
@@ -146,6 +146,88 @@ class Bivariate:
                     Viewer preferences are shifting toward shorter, diverse, and family-friendly content 🎉.  
                     These trends can guide content strategy, marketing, and platform investments 💰.                
                      """)
+            
+    def barplot(self):
+        st.header("Bar Plot")
+        cols = ['runtime vs age_certification', 'imdb_score vs age_certification']
+
+        #BarPlot Sidebar features
+        #Show a sidebar multiselect to select display columns
+        select_col = st.sidebar.multiselect(
+            label= "Bar Plot",
+            options= cols,
+            key= "BarPlotColumns",
+            placeholder= "Choose Columns"
+            )
+        st.sidebar.info(body= "Select multiple columns to display their graphs.", icon= "🎉")
+
+        if not select_col:
+            st.info("Choose which columns to display from the sidebar", icon= "ℹ️") 
+
+        if select_col:
+            for col in select_col:
+
+                col_heading = [x.strip() for x in col.split(sep= "vs")]
+                filtered_data = self.__data.groupby(col_heading[1]).agg({col_heading[0] : 'mean'}).reset_index()
+
+                fig = px.bar(filtered_data[filtered_data[col_heading[1]] != "Unknown"],
+                             x= col_heading[1],
+                             y= col_heading[0],
+                             color= col_heading[1],
+                             color_discrete_sequence=px.colors.qualitative.Vivid,
+                             opacity= 0.8,
+                             text_auto=True   # Show values on bars
+                             )
+                fig.update_traces(
+                    textfont_size=12,
+                    textangle=0,
+                    textposition="outside",
+                    marker=dict(line=dict(width=1, color="white"))  # Clean white border
+                )
+
+                fig.update_layout(
+                    title=dict(
+                        text=f"Distribution of {col_heading[0].replace('_',' ').title()} by {col_heading[1].replace('_',' ').title()}",
+                        x=0.35,  # center title
+                        xanchor="center",
+                        font=dict(size=22, family="Arial, sans-serif")
+                    ),
+                    xaxis=dict(
+                        title=col_heading[1].replace("_", " ").title(),
+                        showgrid=False,
+                    ),
+                    yaxis=dict(
+                        title=col_heading[0].replace("_", " ").title(),
+                        showgrid=True,
+                        zeroline=False,
+                        tickformat=",d"  # Add commas for large numbers
+                    ),
+                    plot_bgcolor="white",
+                    bargap=0.3,  # spacing between bars
+                    margin=dict(l=40, r=40, t=80, b=80),
+                )
+                
+                self.__display_graph(fig)
+
+            st.write("""
+
+                    ---
+                    #### **Insights From The Graphs**
+                                        
+                    ##### **Runtime by Age Certification ⏱️**  
+
+                    - Different age certifications show distinct runtime distributions.  
+                    - PG-13 and R-rated content tends to have longer runtimes, while lower-rated content (G, PG) is shorter.  
+                    - This aligns with audience expectations for complex or mature content being longer.  
+
+                    ---
+                    ##### **IMDb Score by Age Certification 🔞**  
+
+                    - TV-PG and TV-V7 content show slightly higher median scores, suggesting better reception for teen/adult-oriented content.  
+                    - G-rated or PG content is fewer and may not be as widely rated.
+                       
+                     """)
+
 
         
 
