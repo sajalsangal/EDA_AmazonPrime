@@ -15,10 +15,10 @@ class Bivariate:
 
         filter_option = st.sidebar.radio(
             label= "**Filters**",
-            options= ["Line Plot", "Bar Plot", "Bubble Chart", "Violin Plot", "TreeMap"],
+            options= ["Line Plot", "Bar Plot", "Violin Plot","Bubble Chart" , "TreeMap"],
             key= "filterBivariate",
             help= "Choose to display graph 📈",
-            index= 1
+            index= 2
         )
 
         return filter_option
@@ -227,6 +227,99 @@ class Bivariate:
                     - G-rated or PG content is fewer and may not be as widely rated.
                        
                      """)
+            
+    def violinPlot(self):
+        st.header("Violin Plot")
+
+        fig = px.violin(self.__data,
+                        x= "type",
+                        y= "imdb_score",
+                        color= "type",
+                        box=True,  # show embedded boxplot for median & IQR
+                        color_discrete_sequence= px.colors.qualitative.Set1
+                        )
+        
+        fig.update_traces(
+            meanline_visible=True,  # show mean line inside violin
+            scalemode="count",      # width depends on sample size
+            jitter=0.5,             # spread points for visibility
+            marker=dict(size=4, opacity=0.6, line=dict(width=0.5, color="white"))
+        )
+        fig.update_layout(
+            title=dict(
+                text="IMDb Score Distribution by Type",
+                x=0.35,
+                xanchor="center",
+                font=dict(size=22, family="Arial, sans-serif")
+            ),
+            xaxis=dict(
+                title="Type",
+                showgrid=False,
+                zeroline=False
+            ),
+            yaxis=dict(
+                title="IMDb Score",
+                showgrid=True,
+                zeroline=False,
+                rangemode="tozero"
+            ),
+            plot_bgcolor="white",
+            margin=dict(l=60, r=40, t=80, b=60),
+        )
+        
+        self.__display_graph(fig)
+
+        st.write("""
+                 
+                ---
+                #### **Use of Violin Plots**  
+
+                                
+                ##### **Shows Distribution Shape 🎨**   
+
+                - Unlike a box plot, violin plots display the full distribution of the data using a kernel density estimate.  
+                - Reveals skewness, multi-modality, and other patterns in numeric variables that boxplots alone might hide.  
+
+                ---
+                ##### **Summarizes Statistics 📊**  
+
+                - Violin plots include median and interquartile ranges, combining the benefits of boxplots and density plots.  
+                - Helps to quickly assess central tendency and spread.  
+
+                 
+                ---  
+                ##### **Bivariate Comparison 🔍**  
+
+                - When plotting a numeric variable against a categorical variable, you can see how the distribution changes across categories.  
+                - Adding a hue allows comparison across a secondary categorical variable, giving deeper insights.  
+
+                 
+                ---  
+                ##### **Compact and Visual 🖼️**  
+
+                - Multiple violin plots can be displayed as subplots, making it easy to compare distributions across many numeric-categorical pairs in one figure.  
+
+                 
+                ---  
+                ##### **Handles Unequal Sample Sizes Well ⚖️**  
+
+                - Even if some categories have fewer samples, violin plots still show the density, making comparisons meaningful.  
+
+                 
+                ---  
+                #### **Insights**  
+                 
+                ##### **IMDb Score by Type 🎬**  
+
+                - Movies and TV shows have slightly different distributions.  
+                - Movies tend to have a wider spread of scores, whereas TV shows are slightly more clustered.  
+                - Median scores are roughly similar, indicating that both content types maintain comparable quality on average.  
+                """)
+
+
+            
+    def bubblechart(self):
+        st.header("Bubble Chart")
 
 
         

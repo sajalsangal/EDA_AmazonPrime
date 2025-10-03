@@ -111,6 +111,10 @@ elif page == "Bi-Variate Analysis":
         bivariateObj.linePlot()
     elif filter == "Bar Plot":
         bivariateObj.barplot()
+    elif filter == "Violin Plot":
+        bivariateObj.violinPlot()
+    elif filter == "Bubble Chart":
+        bivariateObj.bubblechart()
         
     
 
