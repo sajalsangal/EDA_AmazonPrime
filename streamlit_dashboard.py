@@ -115,6 +115,11 @@ elif page == "Bi-Variate Analysis":
         bivariateObj.violinPlot()
     elif filter == "Bubble Chart":
         bivariateObj.bubblechart()
+    elif filter == "TreeMap":
+        bivariateObj.treemap()
+
+elif page == "MultiVariate Analysis":
+    pass
         
     
 

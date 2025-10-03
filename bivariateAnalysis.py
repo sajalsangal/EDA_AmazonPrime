@@ -18,7 +18,7 @@ class Bivariate:
             options= ["Line Plot", "Bar Plot", "Violin Plot","Bubble Chart" , "TreeMap"],
             key= "filterBivariate",
             help= "Choose to display graph 📈",
-            index= 3
+            index= None
         )
 
         return filter_option
@@ -407,6 +407,58 @@ class Bivariate:
                 - Opacity and sizing make the plot readable even with many data points.  
 
                 > ✅ In short: Bubble plot lets you see trends, popularity, ratings, and genre differences all in one glance, which is much harder with scatter plots or bar charts alone 😄✨.
+
+                 """)
+        
+    def treemap(self):
+        st.header("TreeMap")
+
+        #Largest producing countries
+        filtered_countries = self.__data["production_countries"].value_counts().nlargest(5).index
+        filtered_certification = self.__data[self.__data["age_certification"] != "Unknown"]["age_certification"].value_counts().nlargest(3).index
+        df_filtered = self.__data[self.__data["production_countries"].isin(filtered_countries) & (self.__data["age_certification"].isin(filtered_certification))]   
+
+        fig = px.treemap(
+                        df_filtered,
+                        path=["production_countries", "age_certification"],  # hierarchy
+                        values="imdb_votes",   # use a numeric column to size boxes (density proxy)
+                        color="production_countries",  # color by country
+                        color_discrete_sequence=px.colors.qualitative.Vivid
+                    )
+        
+        fig.update_layout(
+            title=dict(
+                text="Treemap of Top 5 Production Countries vs Age Certification",
+                x=0.5, xanchor="center",
+                font=dict(size=22, family="Arial, sans-serif")
+            ),
+            margin=dict(t=60, l=20, r=20, b=20)
+        )
+        
+        self.__display_graph(fig)
+
+        st.write("""
+                 
+                 ---
+                ### **Use of TreeMap**
+                #### **Hierarchical relationships:**  
+                The dataset has multiple categorical layers (type, age_certification, genres, production_countries). Treemaps are perfect to show nested categories and their relative sizes in one view.
+                
+                ---
+                #### **Proportional insight:**  
+                Displays the proportion of each category within its parent, so you can quickly see dominant types, genres, or countries.
+
+                ---
+                #### **Handles categorical data elegantly:**  
+                Instead of multiple bar plots, treemaps compress information visually, making patterns easier to spot.
+
+                ---
+                #### **Interactive & engaging:**  
+                With Plotly, hovering gives detailed labels and percentages, enhancing user-friendly exploration.
+
+                ---
+                #### **Good for decision-making:**  
+                Helps identify popular content types, gaps, and regional trends, which is crucial for business strategy.
 
                  """)
         
