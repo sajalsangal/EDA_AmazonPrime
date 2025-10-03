@@ -14,10 +14,10 @@ class Univariate:
 
         filter_option = st.sidebar.radio(
             label= "**Filters**",
-            options= ["Histogram", "Box Plot", "Count Plot", "Pie Plot"],
+            options= ["Histogram", "Box Plot", "Count Plot", "Donut Plot"],
             key= "filterUnivariate",
             help= "Choose to display graph 📈",
-            index= 3
+            index= None
         )
 
         return filter_option
@@ -395,7 +395,7 @@ class Univariate:
             )
     
     def pieplot_display(self):
-        st.header("Pie Plot")
+        st.header("Donut Plot")
 
         cols = ['age_certification', 'genres','type', 'production_countries']
 
