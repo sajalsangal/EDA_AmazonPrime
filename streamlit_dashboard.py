@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 import plotly.express as px
-import time
 import homepage #Custom class which handles homepage data
 import univariateAnalysis #Custom class for univariate analysis
 import bivariateAnalysis #Custom class for bivariate analysis
@@ -17,8 +16,6 @@ homePageObj = homepage.HomePage() #An instance of HomePage Class inside homepage
 univariateObj = univariateAnalysis.Univariate() #Instance of Univariate class
 bivariateObj = bivariateAnalysis.Bivariate() #Instance of Bivariate class
 multivariateObj = multivariateAnalysis.MultiVariate()
-
-sns.set_theme(style= "whitegrid") #Set theme for graphs
 
 #Navigation Bar Properties
 sidebarCol1, sidebarCol2 = st.sidebar.columns([.7,.3], vertical_alignment="center") # 70% and 30% width
@@ -63,7 +60,7 @@ with sidebarCol2:
 page = st.sidebar.selectbox(
     label= "Select Page", 
     options= ["Home Page", "Univariate Analysis", "Bi-Variate Analysis", "MultiVariate Analysis"], 
-    index= 3, 
+    index= 0, 
     key= "navigationSelectBox",
     help= """
     **Navigate through different pages**
@@ -129,6 +126,9 @@ elif page == "MultiVariate Analysis":
 
     if filter == "Heatmap":
         multivariateObj.heatmap()
+    elif filter == "Pair Plot":
+        multivariateObj.pairplot()
+
 
     
         

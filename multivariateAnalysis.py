@@ -116,6 +116,126 @@ class MultiVariate:
 
 
                  """)
+        
+    def pairplot(self):
+        st.header("Pair Plot")
+
+        numeric_cols = self.__data.select_dtypes(include= "number")
+
+        fig = px.scatter_matrix(self.__data[self.__data != "Unknown"],
+                                dimensions= numeric_cols,
+                                color= "type",
+                                title="🎨 Interactive Pair Plot of Numeric Columns",
+                                color_discrete_sequence=px.colors.qualitative.Pastel,  # clean, soft colors
+                                height=800,
+                                width=900,
+                                
+                                 )                        
+        # Update marker style for clarity
+        fig.update_traces(
+            marker=dict(size=4, opacity=0.8, line=dict(width=0.4, color='DarkSlateGrey')),
+            diagonal_visible=False,
+        )
+
+        # Update layout for good look and feel
+        fig.update_layout(
+            dragmode='select',
+            hovermode='closest',
+            plot_bgcolor='white',
+            title_font_size=20,
+            margin=dict(l=50, r=50, t=80, b=50),
+            xaxis=dict(showgrid=True, zeroline=False),
+            yaxis=dict(showgrid=True, zeroline=False)
+        )
+        self.__display_graph(fig)
+
+        st.write("""
+                 
+                 ---
+                ### **Use Of Pair Plot**
+                 
+                #### **Bivariate Analysis Across All Numeric Columns 📊:**  
+                The dataset has multiple numeric columns (imdb_score, imdb_votes, tmdb_popularity, tmdb_score, runtime, release_year).  
+                A scatter matrix lets us visually inspect relationships between every pair of numeric variables at once 🔍.  
+
+                 ---
+                #### **Interactive Exploration 🖱️:**  
+                Using Plotly makes it interactive: hover to see movie titles, zoom, pan, and select points.  
+                Very useful for spotting patterns, outliers, or clusters in large datasets 🌟.  
+
+                 ---
+                #### **Hue for Categorical Separation 🎨:**  
+                Adding type (Movies vs Shows) as hue lets us compare patterns within each category.  
+                We can see if Movies and Shows differ in imdb_score, popularity, or runtime 🎬.  
+
+                 ---
+                #### **Compact and Informative 🗂️:**  
+                Instead of multiple individual scatter plots, the scatter matrix combines all relationships into one grid, saving space and giving a complete view ✨.  
+
+                 ---
+                #### **Detect Correlations and Patterns Quickly 💡:**  
+                Makes it easy to spot linear/non-linear relationships, clusters, or extreme values, which can inform further analysis or modeling decisions 🔑.  
+
+                 ---
+                #### **Interactive & Colorful 😎:**  
+                Plotly’s interactivity and vibrant but clean colors make the visualization more appealing and insightful than static plots 🌈.
+
+                 """)
+        
+        st.write("""
+                 
+                 ---
+                 ### **Insights**
+
+                #### **IMDb Scores vs Release Year 🎬**  
+
+                - **Observation:** Older movies/shows tend to have a wide range of IMDb scores, while newer releases cluster in a narrower range.  
+                - **Positive growth opportunity:** Shows may have slightly lower scores compared to movies in recent years.  
+                > ✅ Positive impact: Helps plan content release strategies and monitor quality trends.  
+
+                 ---
+                #### **Votes vs Popularity 📊**  
+
+                - **Observation:** imdb_votes and tmdb_popularity are positively correlated.  
+                - **Positive growth opportunity:** Highly popular titles tend to receive more votes; outliers with extremely high votes/popularity stand out clearly 🌟.  
+                > ✅ Positive impact: Identifies top-performing content for marketing and promotion focus.  
+
+                 ---
+                #### **Genre/Type Differences 🎨**   
+
+                - **Observation:** Using type as hue (Movies vs Shows) reveals patterns: Movies generally have higher tmdb_popularity than Shows; certain clusters are dominated by one type.  
+                - **Positive growth opportunity:** Target content type-specific strategies to enhance engagement.  
+                > ✅ Positive impact: Guides type-specific production and promotion planning.  
+
+                 ---
+                #### **Score Relationships ⭐**  
+
+                - **Observation:** imdb_score and tmdb_score are moderately correlated; some exceptions appear as outliers.  
+                - **Positive growth opportunity:** Highly rated IMDb titles often also have high TMDB ratings.  
+                > ✅ Positive impact: Supports content quality assessment and cross-platform consistency.  
+
+                 ---
+                #### **Runtime Patterns ⏱️**  
+
+                - **Observation:** Movies have a wider range of runtimes; Shows cluster at shorter durations.  
+                - **Positive growth opportunity:** Extreme runtime values can indicate anomalies or special content.  
+                > ✅ Positive impact: Aids in content planning and audience targeting.  
+
+                 ---
+                #### **Outliers & Clusters 🔍**  
+
+                - **Observation:** Outliers, such as movies with extremely high votes or unusually high/low scores, are easily spotted; clusters reveal common patterns in popular, well-rated content 🎉.  
+                - **Positive growth opportunity:** Leverage insights from clusters for content recommendations and marketing.  
+                > ✅ Positive impact: Enables identification of high-value content and trends.  
+
+                 ---
+                #### **Overall Insight**   
+
+                > The scatter matrix allows visual exploration of relationships, detection of outliers, and observation of type-based patterns across multiple numeric features at once. It’s effective for spotting trends, anomalies, and correlations in the dataset 📽️✨.
+
+                 """)
+
+
 
 
 

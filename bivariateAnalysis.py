@@ -324,8 +324,8 @@ class Bivariate:
         df_clean = self.__data[self.__data["imdb_votes"] > 5000]
 
         # Limit to top 5 genres for clarity
-        top_genres = df_clean["age_certification"].value_counts().index
-        df_clean = df_clean[df_clean["age_certification"].isin(top_genres) & (df_clean["age_certification"] != "Unknown")]
+        top_certification = df_clean["age_certification"].value_counts().index
+        df_clean = df_clean[df_clean["age_certification"].isin(top_certification) & (df_clean["age_certification"] != "Unknown")]
 
         fig = px.scatter(df_clean,
                          x= "imdb_score",
