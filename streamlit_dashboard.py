@@ -127,6 +127,9 @@ elif page == "MultiVariate Analysis":
     if not filter:
         st.info("Toggle Filter Options to Display Graph", icon= "ℹ️")
 
+    if filter == "Heatmap":
+        multivariateObj.heatmap()
+
     
         
     
