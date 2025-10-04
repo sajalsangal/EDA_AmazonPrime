@@ -18,6 +18,16 @@ This analysis supports **content strategy, personalized recommendations, and aud
 
 ---
 
+## Streamlit App Preview
+[Hosted](https://smart-amazon-prime-analystics.streamlit.app/)
+
+#### Light Theme
+<img width="1919" height="1079" alt="Screenshot 2025-10-04 213440" src="https://github.com/user-attachments/assets/60636bdd-3d1b-4c44-b040-fa81ff5448df" />
+
+#### Dark Theme
+<img width="1919" height="992" alt="Screenshot 2025-10-04 220107" src="https://github.com/user-attachments/assets/2249c866-93a3-4b45-bcc1-2eb9f4ddc1a4" />
+
+
 ## 📂 Dataset Description  
 
 The project uses two CSV datasets:  
@@ -38,6 +48,9 @@ The project uses two CSV datasets:
      - `imdb_id`, `imdb_score`, `imdb_votes`  
      - `tmdb_popularity`, `tmdb_score`  
 
+<img width="1734" height="759" alt="Screenshot 2025-10-04 214813" src="https://github.com/user-attachments/assets/79f40df0-5651-4a3c-acc4-1934d8483d9a" />
+
+
 2. **Credits Dataset (credits.csv)**  
    - 124,235 records of cast and crew  
    - 5 attributes:  
@@ -45,7 +58,10 @@ The project uses two CSV datasets:
      - `id` – Title ID (to link with titles dataset)  
      - `name` – Actor/Director name  
      - `character` – Character name (if actor)  
-     - `role` – ACTOR or DIRECTOR  
+     - `role` – ACTOR or DIRECTOR
+    
+<img width="1752" height="318" alt="Screenshot 2025-10-04 214824" src="https://github.com/user-attachments/assets/eabd9efa-f3ce-4037-84d2-8dec1e2924c8" />
+
 
 ✅ After **data cleaning, wrangling, handling null values, and outlier removal**, both datasets were merged into a single consolidated dataframe (**df**) for analysis.  
 
@@ -90,18 +106,29 @@ The analysis was performed using **Google Colab** with Python libraries:
 ---
 
 ## ⚙️ Tech Stack  
-- **Platform:** Google Colab  
+- **Platform:** Google Colab, VS Code  
 - **Language:** Python  
-- **Libraries:** Pandas, NumPy, Seaborn, Matplotlib, Plotly  
+- **Libraries:** Pandas, NumPy, Seaborn, Matplotlib, Plotly, Streamlit  
 
 ---
 
 ## ⚙️ Steps to Run the Project
 
-1. **Clone the Repository**  
+1. **Create a Virtual Environment**
    ```bash
-   git clone https://github.com/your-username/Amazon-Prime-TV-Shows-and-Movies.git
-   cd Amazon-Prime-TV-Shows-and-Movies
+   python -m venv .venv
+   .venv/Scripts/activate 
+2. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/sajalsangal/EDA_AmazonPrime.git
+   cd EDA_AmazonPrime
+3. **Install requirements.txt**
+   ```bash
+   pip install requirements.txt
+4. **Run Streamlit App**
+   ```bash
+   streamlit run streamlit_dashboard.py
+     
 Open the Project in Google Colab
 
 Click the Colab badge below:.
