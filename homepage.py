@@ -65,12 +65,9 @@ class HomePage:
         #Home Page Main Area Properties
         st.title("Amazon Prime Analysis")
 
-        #Add code video
-        with open("../1fr.mp4", "rb") as videoFile: #Open video file
-            videoData = videoFile.read()
-        
+        #Add code video   
         st.video( 
-            data= videoData,
+            data= "https://www.youtube.com/watch?v=f9HwA5IR-sg", #temporary video
             format= "video/mp4",
         )
 

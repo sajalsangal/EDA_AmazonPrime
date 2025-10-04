@@ -8,6 +8,7 @@ import time
 import homepage #Custom class which handles homepage data
 import univariateAnalysis #Custom class for univariate analysis
 import bivariateAnalysis #Custom class for bivariate analysis
+import multivariateAnalysis #Customer class for multivariate analysis
 import warnings
 warnings.filterwarnings("ignore", category= UserWarning, module= "matplotlib")
 
@@ -15,6 +16,7 @@ warnings.filterwarnings("ignore", category= UserWarning, module= "matplotlib")
 homePageObj = homepage.HomePage() #An instance of HomePage Class inside homepage module
 univariateObj = univariateAnalysis.Univariate() #Instance of Univariate class
 bivariateObj = bivariateAnalysis.Bivariate() #Instance of Bivariate class
+multivariateObj = multivariateAnalysis.MultiVariate()
 
 sns.set_theme(style= "whitegrid") #Set theme for graphs
 
@@ -61,7 +63,7 @@ with sidebarCol2:
 page = st.sidebar.selectbox(
     label= "Select Page", 
     options= ["Home Page", "Univariate Analysis", "Bi-Variate Analysis", "MultiVariate Analysis"], 
-    index= 2, 
+    index= 3, 
     key= "navigationSelectBox",
     help= """
     **Navigate through different pages**
@@ -119,7 +121,13 @@ elif page == "Bi-Variate Analysis":
         bivariateObj.treemap()
 
 elif page == "MultiVariate Analysis":
-    pass
+    filter = multivariateObj.multivariateFilters()
+
+    multivariateObj.multivariateBody()
+    if not filter:
+        st.info("Toggle Filter Options to Display Graph", icon= "ℹ️")
+
+    
         
     
 
