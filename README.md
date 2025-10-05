@@ -14,7 +14,7 @@ The goal is to uncover patterns, trends, and insights related to:
 - Popularity  
 - Cast and crew involvement  
 
-This analysis supports **content strategy, personalized recommendations, and audience engagement insights** for streaming platforms.  
+This analysis supports **content strategy, personalized recommendations, and audience engagement insights** for streaming platforms  
 
 ---
 
