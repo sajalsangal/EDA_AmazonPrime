@@ -7,6 +7,9 @@ on:
     - cron:  '0 8 * * *'     # 08:00 UTC
     - cron:  '0 16 * * *'    # 16:00 UTC
 
+permissions:
+  contents: write
+
 jobs:
   auto-commit:
     runs-on: ubuntu-latest
