@@ -19,8 +19,8 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "sajalsangal"
+          git config user.email "sajalsangal@gmail.com"
 
       - name: Update README with timestamp
         run: |
@@ -34,5 +34,5 @@ jobs:
       - name: Commit and push changes
         run: |
           git add README.md
-          git commit -m "Automated commit: $(date -u)" || echo "No changes to commit"
+          git commit -m "Updated Readme.md" || echo "No changes to commit"
           git push origin main
