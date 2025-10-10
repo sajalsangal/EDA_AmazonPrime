@@ -1,6 +1,7 @@
 # 🎬 Amazon Prime TV Shows and Movies  
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1m6o6KJ4gt0P7ddjwJ-Sch2cKqBbg6tUA?usp=sharing)
+[Live Hosted](https://smart-amazon-prime-analystics.streamlit.app/)
 
 ---
 
