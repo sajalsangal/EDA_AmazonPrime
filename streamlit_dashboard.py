@@ -59,7 +59,7 @@ with sidebarCol2:
 #SideBar Page Selection Pannel
 page = st.sidebar.selectbox(
     label= "Select Page", 
-    options= ["Home Page", "Univariate Analysis", "Bi-Variate Analysis", "MultiVariate Analysis"], 
+    options= ["Home Page", "Univariate Analysis", "Bi-Variate Analysis", "MultiVariate Analysis", "PowerBi Dashboard"], 
     index= 0, 
     key= "navigationSelectBox",
     help= """
@@ -128,6 +128,82 @@ elif page == "MultiVariate Analysis":
         multivariateObj.heatmap()
     elif filter == "Pair Plot":
         multivariateObj.pairplot()
+
+elif page == "PowerBi Dashboard":
+    st.write("""
+             # PowerBI Dashboard
+             
+             [Github Link](https://github.com/sajalsangal/PowerBI-Dashboard) : 
+             This Power BI project provides a comprehensive analysis of **Amazon Prime Video’s movie and TV show dataset**, offering key insights into content distribution, viewer ratings, and trends over time.
+             
+             ---
+             """)
+    st.image("Prime Dashboard.jpg")
+    st.write("""
+            ### 📊 Dashboard Overview
+
+
+            The dashboard visualizes various performance and content metrics, helping users explore:
+
+            - **Total Titles:** 2,911  
+            - **Average IMDB Score:** 6.07  
+            - **Total Runtime:** 262K  
+            - **Average TMDB Value:** 13.39  
+
+            It’s designed with an intuitive dark theme inspired by Amazon Prime’s branding.
+
+            ---
+
+            ## 🔍 Key Insights
+
+            - **Content Distribution:** Movies dominate the platform, representing over 80% of total titles.
+            - **Runtime Growth:** Total runtime has grown significantly since the early 2000s, showing increased production volume.
+            - **Ratings by Age Certification:** Content rated **TV-MA** and **TV-PG** tends to perform better on IMDB.
+            - **IMDB vs Popularity:** A positive correlation is observed — higher-rated titles generally have higher popularity.
+
+            ---
+
+            ## ⚙️ Features
+
+            - Interactive filters by:
+            - **Release Year**
+            - **Content Type (Movie / Show)**
+            - **Age Certification**
+            - Dynamic visuals including:
+            - Donut Chart for content type distribution  
+            - Area Chart for runtime growth  
+            - Bar Chart for ratings comparison  
+            - Scatter Plot for IMDB–Popularity relationship  
+
+            ---
+
+            ## 📂 Dataset
+
+            The dataset used contains detailed information on:
+            - Title, Type, Release Year
+            - IMDB and TMDB Scores
+            - Runtime
+            - Age Certification
+
+            ---
+
+            ## 🧠 Tools Used
+
+            - **Power BI Desktop** – for data modeling and visualization
+            - **Power Query Editor and DAX** - for data processing and transforming  
+            - **GitHub** – for version control and hosting  
+
+            ---
+
+            ## 🚀 How to View the Dashboard
+
+            You can explore the live dashboard:
+            - Download the `.pbix` file and open it in **Power BI Desktop**  
+
+             """)
+else:
+    st.error("Some Error Occured while loading the page, try again later", icon="⚠️")
+
 
 
     
