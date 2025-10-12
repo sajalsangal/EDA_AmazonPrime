@@ -67,7 +67,7 @@ class HomePage:
 
         #Add code video   
         st.video( 
-            data= "https://www.youtube.com/watch?v=f9HwA5IR-sg", #temporary video
+            data= "https://youtu.be/72x22MUpNhE", # video
             format= "video/mp4",
         )
 
