@@ -187,4 +187,4 @@ These insights can support **strategic decisions in content acquisition, persona
 
 ---
 
-Last auto-commit: Sun Nov 30 16:13:39 UTC 2025
+Last auto-commit: Mon Dec  1 01:45:23 UTC 2025
